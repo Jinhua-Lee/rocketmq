@@ -21,10 +21,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
 import org.apache.rocketmq.common.MixAll;
 
+/**
+ * 同一个Broker的Master及其多个slave
+ * 【Master与Slave的对应关系通过指定相同的Broker Name，不同的Broker Id来定义】
+ * brokerId -> broker地址。
+ */
 public class BrokerData implements Comparable<BrokerData> {
     private String cluster;
+    /**
+     * brokerName相同，代表他们是跟随同一个Master
+     */
     private String brokerName;
     private HashMap<Long/* brokerId */, String/* broker address */> brokerAddrs;
 
@@ -51,6 +60,7 @@ public class BrokerData implements Comparable<BrokerData> {
 
         if (addr == null) {
             List<String> addrs = new ArrayList<String>(brokerAddrs.values());
+            // 选主，否则随机选备
             return addrs.get(random.nextInt(addrs.size()));
         }
 

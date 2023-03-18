@@ -32,13 +32,35 @@ import org.apache.rocketmq.common.constant.LoggerName;
 import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
 
+/**
+ * 文件监控服务，
+ */
 public class FileWatchService extends ServiceThread {
     private static final InternalLogger log = InternalLoggerFactory.getLogger(LoggerName.COMMON_LOGGER_NAME);
 
+    /**
+     * 被监控的文件
+     */
     private final List<String> watchFiles;
+
+    /**
+     * 文件的当前hash码
+     */
     private final List<String> fileCurrentHash;
+
+    /**
+     * 监控这些文件的监听器
+     */
     private final Listener listener;
+
+    /**
+     * 文件的监控间隔
+     */
     private static final int WATCH_INTERVAL = 500;
+
+    /**
+     * 密码工具，用于计算hash值
+     */
     private MessageDigest md = MessageDigest.getInstance("MD5");
 
     public FileWatchService(final String[] watchFiles,
@@ -66,6 +88,7 @@ public class FileWatchService extends ServiceThread {
 
         while (!this.isStopped()) {
             try {
+                // 文件服务等待去运行
                 this.waitForRunning(WATCH_INTERVAL);
 
                 for (int i = 0; i < watchFiles.size(); i++) {

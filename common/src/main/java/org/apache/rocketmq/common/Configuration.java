@@ -29,12 +29,23 @@ import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 通过读写锁，线程安全地，将各种配置（properties, obj等方式），加入到allConfigs中
+ */
 public class Configuration {
 
     private final InternalLogger log;
 
     private List<Object> configObjectList = new ArrayList<Object>(4);
+
+    /**
+     * 配置的存储路径
+     */
     private String storePath;
+
+    /**
+     * 是否从路径中存储配置
+     */
     private boolean storePathFromConfig = false;
     private Object storePathObject;
     private Field storePathField;

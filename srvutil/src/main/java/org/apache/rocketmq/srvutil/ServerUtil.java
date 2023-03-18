@@ -17,6 +17,7 @@
 package org.apache.rocketmq.srvutil;
 
 import java.util.Properties;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -24,6 +25,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * 命令行参数 <--> properties
+ */
 public class ServerUtil {
 
     public static Options buildCommandlineOptions(final Options options) {
@@ -32,8 +36,8 @@ public class ServerUtil {
         options.addOption(opt);
 
         opt =
-            new Option("n", "namesrvAddr", true,
-                "Name server address list, eg: '192.168.0.1:9876;192.168.0.2:9876'");
+                new Option("n", "namesrvAddr", true,
+                        "Name server address list, eg: '192.168.0.1:9876;192.168.0.2:9876'");
         opt.setRequired(false);
         options.addOption(opt);
 
@@ -41,12 +45,15 @@ public class ServerUtil {
     }
 
     public static CommandLine parseCmdLine(final String appName, String[] args, Options options,
-        CommandLineParser parser) {
+                                           CommandLineParser parser) {
+        // 帮助菜单
         HelpFormatter hf = new HelpFormatter();
         hf.setWidth(110);
         CommandLine commandLine = null;
         try {
+            // 存储解析出来的命令选项与参数
             commandLine = parser.parse(options, args);
+            // 带h就直接打印帮助并退出
             if (commandLine.hasOption('h')) {
                 hf.printHelp(appName, options, true);
                 System.exit(0);
